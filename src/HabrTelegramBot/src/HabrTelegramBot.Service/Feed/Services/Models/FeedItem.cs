@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace HabrTelegramBot.Service.Feed.Models;
+namespace HabrTelegramBot.Service.Feed.Services.Models;
 
 [JsonObject]
-internal class FeedItem
+public class FeedItem
 {
     [JsonRequired]
     [JsonProperty(PropertyName = "title")]

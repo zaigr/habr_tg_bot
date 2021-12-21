@@ -1,19 +1,19 @@
 ﻿using HabrTelegramBot.Service.Feed.EventArgs;
-using HabrTelegramBot.Service.Feed.Models;
-using System.Net.Http.Json;
+using HabrTelegramBot.Service.Feed.Services;
+using HabrTelegramBot.Service.Feed.Services.Models;
 
 namespace HabrTelegramBot.Service.Feed;
 
 public class FeedItemsReceiver
 {
-    private readonly Uri _postsApi;
-
     private readonly TimeSpan _apiPoolingInterval;
 
-    public FeedItemsReceiver(string postsApi, TimeSpan apiPoolingInterval)
+    private readonly CrawlerService _crawlerService;
+
+    public FeedItemsReceiver(CrawlerService crawlerService, TimeSpan apiPoolingInterval)
     {
+        _crawlerService = crawlerService;
         _apiPoolingInterval = apiPoolingInterval;
-        _postsApi = new Uri(postsApi);
     }
 
     public event EventHandler<FeedItemAddedEventArgs> FeedItemAdded = default!;
@@ -22,17 +22,17 @@ public class FeedItemsReceiver
     {
         return Task.Run(async () =>
             {
-                var httpClient = new HttpClient();
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     try
                     {
-                        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * _apiPoolingInterval.TotalSeconds);
+                        var thresholdSec = 10;
+                        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * (_apiPoolingInterval.TotalSeconds + thresholdSec));
 
-                        // TODO: send fromDate to posts API
-                        var posts = await httpClient.GetFromJsonAsync<List<FeedItem>>(_postsApi, cancellationToken);
-
+                        var posts = await _crawlerService.GetFeedItemsAsync(fromDate, cancellationToken);
                         NotifyOnNewPostsAdded(posts);
+
+                        await Task.Delay(_apiPoolingInterval, cancellationToken);
                     }
                     catch (Exception e)
                     {
@@ -48,19 +48,21 @@ public class FeedItemsReceiver
 
     private void NotifyOnNewPostsAdded(IEnumerable<FeedItem>? feedItems)
     {
-        if (feedItems is not null)
+        if (feedItems is null)
         {
-            foreach (var item in feedItems.Skip(Random.Shared.Next(10, 19))) // TODO: remove random skip (test purpose)
-            {
-                FeedItemAdded(this, new FeedItemAddedEventArgs(
-                    feedName: ".Net", // TODO: get feed name from API
-                    item.Title,
-                    item.Description,
-                    item.Link,
-                    item.PublicationDate,
-                    item.Categories)
-                );
-            }
+            return;
+        }
+
+        foreach (var item in feedItems)
+        {
+            FeedItemAdded(this, new FeedItemAddedEventArgs(
+                feedName: ".Net", // TODO: get feed name from API
+                item.Title,
+                item.Description,
+                item.Link,
+                item.PublicationDate,
+                item.Categories)
+            );
         }
     }
 }
