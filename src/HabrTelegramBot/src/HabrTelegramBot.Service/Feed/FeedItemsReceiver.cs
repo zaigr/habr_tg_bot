@@ -1,6 +1,7 @@
 ﻿using HabrTelegramBot.Service.Feed.EventArgs;
 using HabrTelegramBot.Service.Feed.Services;
 using HabrTelegramBot.Service.Feed.Services.Models;
+using Serilog;
 
 namespace HabrTelegramBot.Service.Feed;
 
@@ -26,24 +27,29 @@ public class FeedItemsReceiver
                 {
                     try
                     {
-                        var thresholdSec = 10;
-                        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * (_apiPoolingInterval.TotalSeconds + thresholdSec));
+                        var posts = await GetLatestPostsAsync(cancellationToken);
 
-                        var posts = await _crawlerService.GetFeedItemsAsync(fromDate, cancellationToken);
                         NotifyOnNewPostsAdded(posts);
 
                         await Task.Delay(_apiPoolingInterval, cancellationToken);
                     }
                     catch (Exception e)
                     {
-                        // TODO: error handler
-                        throw;
+                        Log.Error(e, "Exception raised during message feed polling.");
                     }
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
             },
             cancellationToken);
+    }
+
+    private async Task<IEnumerable<FeedItem>?> GetLatestPostsAsync(CancellationToken ct)
+    {
+        var thresholdSec = 10;
+        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * (_apiPoolingInterval.TotalSeconds + thresholdSec));
+
+        return await _crawlerService.GetFeedItemsAsync(fromDate, ct);
     }
 
     private void NotifyOnNewPostsAdded(IEnumerable<FeedItem>? feedItems)

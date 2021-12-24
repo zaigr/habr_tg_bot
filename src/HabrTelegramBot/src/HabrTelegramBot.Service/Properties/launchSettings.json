@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HabrTelegramBot.Service": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
