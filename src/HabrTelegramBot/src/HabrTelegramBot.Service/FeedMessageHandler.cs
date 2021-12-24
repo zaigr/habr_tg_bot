@@ -1,5 +1,6 @@
 ﻿using HabrTelegramBot.Service.BotApi;
 using HabrTelegramBot.Service.Feed.EventArgs;
+using Serilog;
 
 namespace HabrTelegramBot.Service;
 
@@ -22,8 +23,7 @@ internal class FeedMessageHandler
         }
         catch (Exception e)
         {
-            // log exception here
-            throw;
+            Log.Error(e, "Exception raised during feed message processing");
         }
     }
 

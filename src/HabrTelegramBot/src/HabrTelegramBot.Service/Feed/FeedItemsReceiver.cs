@@ -1,6 +1,7 @@
 ﻿using HabrTelegramBot.Service.Feed.EventArgs;
 using HabrTelegramBot.Service.Feed.Services;
 using HabrTelegramBot.Service.Feed.Services.Models;
+using Serilog;
 
 namespace HabrTelegramBot.Service.Feed;
 
@@ -34,8 +35,7 @@ public class FeedItemsReceiver
                     }
                     catch (Exception e)
                     {
-                        // TODO: error handler
-                        throw;
+                        Log.Error(e, "Exception raised during message feed polling.");
                     }
                 }
 
