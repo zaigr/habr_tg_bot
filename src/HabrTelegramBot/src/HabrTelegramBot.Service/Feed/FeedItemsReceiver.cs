@@ -26,10 +26,8 @@ public class FeedItemsReceiver
                 {
                     try
                     {
-                        var thresholdSec = 10;
-                        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * (_apiPoolingInterval.TotalSeconds + thresholdSec));
+                        var posts = await GetLatestPostsAsync(cancellationToken);
 
-                        var posts = await _crawlerService.GetFeedItemsAsync(fromDate, cancellationToken);
                         NotifyOnNewPostsAdded(posts);
 
                         await Task.Delay(_apiPoolingInterval, cancellationToken);
@@ -44,6 +42,14 @@ public class FeedItemsReceiver
                 cancellationToken.ThrowIfCancellationRequested();
             },
             cancellationToken);
+    }
+
+    private async Task<IEnumerable<FeedItem>?> GetLatestPostsAsync(CancellationToken ct)
+    {
+        var thresholdSec = 10;
+        var fromDate = DateTimeOffset.UtcNow.AddSeconds(-1 * (_apiPoolingInterval.TotalSeconds + thresholdSec));
+
+        return await _crawlerService.GetFeedItemsAsync(fromDate, ct);
     }
 
     private void NotifyOnNewPostsAdded(IEnumerable<FeedItem>? feedItems)
