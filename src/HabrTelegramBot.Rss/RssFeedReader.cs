@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 using System.ServiceModel.Syndication;
-using HabrTelegramBot.Models;
+using HabrTelegramBot.Rss.Models;
 
 namespace HabrTelegramBot.Rss;
 

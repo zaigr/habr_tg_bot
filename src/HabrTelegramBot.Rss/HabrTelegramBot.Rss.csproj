@@ -10,8 +10,4 @@
     <PackageReference Include="System.ServiceModel.Syndication" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HabrTelegramBot.Models\HabrTelegramBot.Models.csproj" />
-  </ItemGroup>
-
 </Project>

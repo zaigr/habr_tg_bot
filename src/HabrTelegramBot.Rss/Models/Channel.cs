@@ -1,4 +1,4 @@
-﻿namespace HabrTelegramBot.Models;
+﻿namespace HabrTelegramBot.Rss.Models;
 
 public class Channel
 {
