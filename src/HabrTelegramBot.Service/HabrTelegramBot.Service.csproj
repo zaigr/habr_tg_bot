@@ -14,7 +14,14 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Telegram.Bot" Version="17.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HabrTelegramBot.Models\HabrTelegramBot.Models.csproj" />
+    <ProjectReference Include="..\HabrTelegramBot.Rss\HabrTelegramBot.Rss.csproj" />
   </ItemGroup>
 
   <ItemGroup>

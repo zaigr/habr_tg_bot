@@ -1,7 +1,6 @@
-﻿using HabrTelegramBot.Service;
+﻿using HabrTelegramBot.Rss;
+using HabrTelegramBot.Service;
 using HabrTelegramBot.Service.BotApi;
-using HabrTelegramBot.Service.Feed;
-using HabrTelegramBot.Service.Feed.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -24,20 +23,28 @@ Log.Logger = new LoggerConfiguration()
         )
     .CreateLogger();
 
-try
+var botApiClient = new BotApiClient(configuration["BotApi:BotChadId"], configuration["BotApi:AccessToken"]);
+var rssReader = new RssFeedReader(new HttpClient());
+var botChannelService = new BotChannelService(botApiClient, rssReader);
+
+var crawlerApiPollInterval = TimeSpan.FromSeconds(configuration.GetValue<int>("CrawlerServiceApi:PollIntervalSeconds"));
+var rssLinks = new[] { "https://habr.com/ru/rss/hub/net/all/?fl=ru" };
+
+Log.Information("Starting observing message feed.");
+
+while (true)
 {
-    var crawlerApiPollInterval = TimeSpan.FromSeconds(configuration.GetValue<int>("CrawlerServiceApi:PollIntervalSeconds"));
-    var feedMessageReceiver = new FeedItemsReceiver(new CrawlerService(configuration["CrawlerServiceApi:Url"]), crawlerApiPollInterval);
+    foreach (var rssLink in rssLinks)
+    {
+        try
+        {
+            await botChannelService.ForwardChannelItemsToBotAsync(rssLink);
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "Exception raised during RSS feed forwarding.");
+        }
 
-    var feedMessageHandler = new FeedMessageHandler(new BotApiService(configuration["BotApi:BotChadId"], configuration["BotApi:AccessToken"]));
-    feedMessageReceiver.FeedItemAdded += async (_, e) => await feedMessageHandler.FeedItemAddedAsyncHandler(e);
-
-    Log.Information("Starting observing message feed.");
-
-    await feedMessageReceiver.StartObserving(CancellationToken.None);
-}
-catch (Exception e)
-{
-    Log.Error(e, "Fatal error raised.");
-    throw;
+        await Task.Delay(crawlerApiPollInterval);
+    }
 }

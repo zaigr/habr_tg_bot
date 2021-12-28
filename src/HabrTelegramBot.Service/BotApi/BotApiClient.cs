@@ -2,13 +2,13 @@
 
 namespace HabrTelegramBot.Service.BotApi;
 
-public class BotApiService
+public class BotApiClient
 {
     private readonly string _chatId;
 
     private readonly TelegramBotClient _botClient;
 
-    public BotApiService(string chatId, string apiAccessToken)
+    public BotApiClient(string chatId, string apiAccessToken)
     {
         _chatId = chatId;
         _botClient = new TelegramBotClient(apiAccessToken);
