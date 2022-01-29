@@ -1,1 +1,1 @@
-# Telegram bot observing habr.com RSS feeds
+# Telegram bot observing RSS feeds
