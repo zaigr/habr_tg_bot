@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "HabrTelegramBot.Service": {
+    "HabrTelegramBot.AzureFunc": {
       "commandName": "Project",
       "environmentVariables": {
-        "_ENVIRONMENT": "Development"
+        "Environment": "Development"
       }
     }
   }

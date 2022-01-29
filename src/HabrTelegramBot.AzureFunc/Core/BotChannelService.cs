@@ -1,8 +1,10 @@
-﻿using HabrTelegramBot.Data.Services;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using HabrTelegramBot.AzureFunc.BotApi;
+using HabrTelegramBot.Data.Services;
 using HabrTelegramBot.Rss;
-using HabrTelegramBot.Service.BotApi;
 
-namespace HabrTelegramBot.Service;
+namespace HabrTelegramBot.AzureFunc.Core;
 
 public class BotChannelService
 {

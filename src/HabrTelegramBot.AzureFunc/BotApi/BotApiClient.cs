@@ -1,6 +1,7 @@
-﻿using Telegram.Bot;
+﻿using System.Threading.Tasks;
+using Telegram.Bot;
 
-namespace HabrTelegramBot.Service.BotApi;
+namespace HabrTelegramBot.AzureFunc.BotApi;
 
 public class BotApiClient
 {
