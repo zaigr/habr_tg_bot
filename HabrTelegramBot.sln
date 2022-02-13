@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabrTelegramBot.Data", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabrTelegramBot.AzureFunc", "src\HabrTelegramBot.AzureFunc\HabrTelegramBot.AzureFunc.csproj", "{31222575-30CC-4158-9D8D-2CE3F386D44C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Api", "ChatBot.Api\ChatBot.Api.csproj", "{A12B95CA-5822-4038-9F23-7ABB152DFC86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Api", "src\ChatBot.Api\ChatBot.Api.csproj", "{A12B95CA-5822-4038-9F23-7ABB152DFC86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AzFunc.AzureCostMonitor", "ChatBot.AzFunc.AzureCostMonitor\ChatBot.AzFunc.AzureCostMonitor.csproj", "{3F911854-5C9C-464C-982D-5BE4E749A17F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.AzFunc.AzureCostMonitor", "src\ChatBot.AzFunc.AzureCostMonitor\ChatBot.AzFunc.AzureCostMonitor.csproj", "{3F911854-5C9C-464C-982D-5BE4E749A17F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
